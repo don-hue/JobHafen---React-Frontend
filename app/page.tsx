@@ -1,69 +1,99 @@
-import Image from "next/image";
+'use client';
+import { Database } from '@primeicons/react/database';
+import { Star } from '@primeicons/react/star';
+import { StarFill } from '@primeicons/react/star-fill';
+import { DataTable } from '@primereact/ui/datatable';
+import { Rating } from '@primereact/ui/rating';
+import { Tag } from '@primereact/ui/tag';
+import * as React from 'react';
+import { ToggleSwitchRootChangeEvent } from '@primereact/ui/toggleswitch';
+import { ToggleSwitch } from '@primereact/ui/toggleswitch';
+import {
+    CheckCircle
+} from '@primeicons/react';
+type JobTableRow = {
+    id: number;
+    jobTitle: string;
+    applied: boolean;
+    companyName: string;
+    companyHomepage?: String;
+    toogleDisable: boolean;
+}
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    const [jobs, setJobs] = React.useState<JobTableRow[]>([
+        {
+            id: 1,
+            jobTitle: 'Java Entwickler (m/w/d)',
+            applied: true,
+            companyName: 'DeineTraumFirma GmbH',
+            companyHomepage: undefined,
+            toogleDisable: false,
+        },
+        {
+            id: 2,
+            jobTitle: 'Full Stack Developer (m/w/d)',
+            applied: false,
+            companyName: 'DeineTraumFirma GmbH',
+            companyHomepage: undefined,
+            toogleDisable: false,
+        },
+    ]);
+
+    const toggleApplied = (jobId: number, checked: boolean) => {
+        setJobs(prevJobs => 
+            prevJobs.map(job => 
+                job.id == jobId
+                    ? {...job, applied: checked}
+                    : job
+            )
+        );
+    }
+
+
+    return (
+        <div className="w-full">
+            <DataTable.Root data={jobs}>
+                <DataTable.TableContainer>
+                    <DataTable.Table style={{ minWidth: '50rem' }}>
+                        <DataTable.THead>
+                            <DataTable.THeadRow>
+                                <DataTable.THeadCell>
+                                    <DataTable.THeadTitle>Jobs</DataTable.THeadTitle>
+                                </DataTable.THeadCell>
+                            </DataTable.THeadRow>
+                        </DataTable.THead>
+                        <DataTable.TBody>
+                            {({ item }) => {
+                                const job = item as JobTableRow;
+                                return (
+                                    <DataTable.Row key={job.id}>
+                                        <DataTable.Cell>
+                                            <div className="job-cell" id="job.id">
+                                                <div className = {`checked-cell ${!job.applied ? 'hidden' : ''}`}>
+                                                   <CheckCircle/>
+                                                </div>
+                                                <div className="job-info">
+                                                    <span className="search-keyword">{ job.jobTitle }</span>
+                                                    <span className="search-portals">{ job.companyName}</span>
+                                                </div>
+                                                <div className="toggle-cell">
+                                                    <ToggleSwitch.Root inputId="mode" checked={job.applied} onCheckedChange={(event: ToggleSwitchRootChangeEvent) => toggleApplied(job.id,event.checked)}>
+                                                        <ToggleSwitch.Control>
+                                                            <ToggleSwitch.Handle />
+                                                        </ToggleSwitch.Control>
+                                                    </ToggleSwitch.Root>
+                                                    <label htmlFor="mode">beworben</label>
+                                                </div>
+                                            </div>
+                                        </DataTable.Cell>
+                                    </DataTable.Row>
+                                );
+                            }}
+                        </DataTable.TBody>
+                    </DataTable.Table>
+                </DataTable.TableContainer>
+            </DataTable.Root>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    );
 }
