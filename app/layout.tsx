@@ -8,13 +8,20 @@ import {
     Home,
     Search,
     Sidebar as SidebarIcon,
-    Cog
+    Cog,
+    Check,
+    ExclamationTriangle,
+    InfoCircle,
+    Times
 } from '@primeicons/react';
 import { useIsMobile } from '@primereact/hooks';
 import { Avatar } from '@primereact/ui/avatar';
 import { Button } from '@primereact/ui/button';
 import { Sidebar } from '@primereact/ui/sidebar';
 import Link from "next/link";
+import { Toast } from '@primereact/ui/toast';
+import { Toaster, toast } from '@primereact/ui/toaster';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +37,48 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   const isMobile = useIsMobile(1024);
   const pathname = usePathname();
   return (
+    
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <PrimeSSRProvider>
+<Toaster.Root>
+    <Toaster.Portal>
+        <Toaster.Region>
+            {({ toaster }) =>
+                toaster?.toasts?.map((t) => (
+                    <Toast.Root key={t.id} toast={t}>
+                        <Toast.Content>
+                            <Toast.Icon match="success">
+                                <Check />
+                            </Toast.Icon>
+                            <Toast.Icon match="error">
+                                <Times />
+                            </Toast.Icon>
+                            <Toast.Icon match="warn">
+                                <ExclamationTriangle />
+                            </Toast.Icon>
+                            <Toast.Icon match="info">
+                                <InfoCircle />
+                            </Toast.Icon>
+                            <Toast.Message>
+                                <Toast.Title />
+                                <Toast.Description />
+                                <Toast.Action />
+                            </Toast.Message>
+                            <Toast.Close />
+                        </Toast.Content>
+                    </Toast.Root>
+                ))
+            }
+        </Toaster.Region>
+    </Toaster.Portal>
+</Toaster.Root>
+
+
+
           <div className="border border-surface-200 dark:border-surface-700 rounded-lg overflow-hidden">
                 <Sidebar.Layout className="min-h-192! relative!" style={{height: "99.5vh"}}>
                     {isMobile && <Sidebar.Backdrop className="absolute!" />}
@@ -107,8 +150,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                         </header>
                         <div className="flex-1 p-4 flex flex-col gap-4">
                           {children}
-                            {/* <div className="rounded-lg bg-surface-100 dark:bg-surface-800 h-48" ></div>
-                            <div className="rounded-lg bg-surface-100 dark:bg-surface-800 flex-1" ></div> */}
                         </div>
                     </Sidebar.Main>
                 </Sidebar.Layout>

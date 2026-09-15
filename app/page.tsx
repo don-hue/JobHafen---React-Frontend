@@ -1,15 +1,14 @@
 'use client';
-import { Database } from '@primeicons/react/database';
-import { Star } from '@primeicons/react/star';
-import { StarFill } from '@primeicons/react/star-fill';
 import { DataTable } from '@primereact/ui/datatable';
-import { Rating } from '@primereact/ui/rating';
-import { Tag } from '@primereact/ui/tag';
 import * as React from 'react';
 import { ToggleSwitchRootChangeEvent } from '@primereact/ui/toggleswitch';
 import { ToggleSwitch } from '@primereact/ui/toggleswitch';
+import { Button } from '@primereact/ui/button';
+import { ProgressSpinner } from '@primereact/ui/progressspinner';
 import {
-    CheckCircle
+    CheckCircle, 
+    Replay, 
+    Spinner
 } from '@primeicons/react';
 type JobTableRow = {
     id: number;
@@ -21,6 +20,7 @@ type JobTableRow = {
 }
 
 export default function Home() {
+    const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [jobs, setJobs] = React.useState<JobTableRow[]>([
         {
             id: 1,
@@ -28,7 +28,7 @@ export default function Home() {
             applied: true,
             companyName: 'DeineTraumFirma GmbH',
             companyHomepage: undefined,
-            toogleDisable: false,
+            toogleDisable: true,
         },
         {
             id: 2,
@@ -59,7 +59,22 @@ export default function Home() {
                         <DataTable.THead>
                             <DataTable.THeadRow>
                                 <DataTable.THeadCell>
-                                    <DataTable.THeadTitle>Jobs</DataTable.THeadTitle>
+                                    <DataTable.THeadTitle>
+                                        Jobs 
+                                        <Button style={{marginLeft:"0.5rem"}}
+                                        // (click)="update()"                               
+                                        >
+                                            {isLoading ? (
+                                                <ProgressSpinner.Root aria-label="Loading" style={{width:"1rem", height:"1rem"}}>
+                                                    <ProgressSpinner.Track />
+                                                    <ProgressSpinner.Range />
+                                                </ProgressSpinner.Root>  
+                                            ) : (
+                                                <Replay/>
+                                            )
+                                        }
+                                        </Button>
+                                    </DataTable.THeadTitle>
                                 </DataTable.THeadCell>
                             </DataTable.THeadRow>
                         </DataTable.THead>
@@ -73,17 +88,19 @@ export default function Home() {
                                                 <div className = {`checked-cell ${!job.applied ? 'hidden' : ''}`}>
                                                    <CheckCircle/>
                                                 </div>
-                                                <div className="job-info">
-                                                    <span className="search-keyword">{ job.jobTitle }</span>
-                                                    <span className="search-portals">{ job.companyName}</span>
-                                                </div>
-                                                <div className="toggle-cell">
-                                                    <ToggleSwitch.Root inputId="mode" checked={job.applied} onCheckedChange={(event: ToggleSwitchRootChangeEvent) => toggleApplied(job.id,event.checked)}>
-                                                        <ToggleSwitch.Control>
-                                                            <ToggleSwitch.Handle />
-                                                        </ToggleSwitch.Control>
-                                                    </ToggleSwitch.Root>
-                                                    <label htmlFor="mode">beworben</label>
+                                                <div className="job-info-cell">
+                                                    <div className="job-info">
+                                                        <span className="search-keyword">{ job.jobTitle }</span>
+                                                        <span className="search-portals">{ job.companyName}</span>
+                                                    </div>
+                                                    <div className="toggle-cell">
+                                                        <ToggleSwitch.Root inputId="mode" checked={job.applied} onCheckedChange={(event: ToggleSwitchRootChangeEvent) => toggleApplied(job.id,event.checked)}>
+                                                            <ToggleSwitch.Control>
+                                                                <ToggleSwitch.Handle />
+                                                            </ToggleSwitch.Control>
+                                                        </ToggleSwitch.Root>
+                                                        <label htmlFor="mode">beworben</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </DataTable.Cell>

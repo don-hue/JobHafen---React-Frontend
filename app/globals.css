@@ -36,7 +36,16 @@ body {
     z-index: -10;
 
 }
-.search-cell:hover {
+
+.hovered{
+    gap: 1.5rem;
+    padding: 0.5rem;
+    transition: background-color 0.2s ease;
+    border-radius: 5px;
+    flex: 1;
+
+}
+.hovered:hover {
   background-color: #5f5e5e;
   border-radius: 5px;
   opacity: 20;
@@ -75,18 +84,33 @@ body {
     opacity: 0;
 }
 
+.delete-cell{
+    display: flex;
+    align-self: center;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
 .job-cell {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
     padding: 0.5rem;
   
-    transition: background-color 0.2s ease;
-    border-radius: 5px;
-    z-index: -10;
+   
 
 }
-.job-cell:hover {
+
+.job-info-cell{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    flex:1;
+
+    transition: background-color 0.5s ease;
+    border-radius: 5px;
+}
+.job-info-cell:hover {
   background-color: #5f5e5e;
   border-radius: 5px;
   opacity: 20;
@@ -96,6 +120,7 @@ body {
     flex-direction: column;
     gap: 0.5rem;
     padding-left:1.5rem;
+    flex: 1;
 }
 
 .toggle-cell {
